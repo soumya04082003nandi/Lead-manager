@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const connectDB = require("./src/config/db")
+const authRouter = require("./src/routes/auth.routes")
 
 
 
@@ -19,8 +20,10 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
-
 app.use(express.json());
+
+//routes
+app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
     res.send("API is running");
