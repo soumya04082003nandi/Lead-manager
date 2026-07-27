@@ -168,10 +168,42 @@ const handleLogout = (req,res)=>{
         success:true,
         message:"Logged out successfully."
     });
-    
+
+}
+
+const handleGetMe = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).select("name email role");
+
+        if(!user){
+            return res.status(404).json({
+                success:false,
+                message:"User not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "User details fetched successfully.",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        })
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
 }
 
 module.exports = {
     handleRegister,
-    handleLogin
+    handleLogin,
+    handleLogout,
+    handleGetMe
 }
