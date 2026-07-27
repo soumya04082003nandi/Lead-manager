@@ -28,7 +28,7 @@ authRouter.post("/login", authController.handleLogin);
  * @description Logout a user
  * @access Private
  */
-authRouter.post("/logout",isLoggedIn, authController.handleLogout);
+authRouter.get("/logout",isLoggedIn, authController.handleLogout);
 
 /**
  * @route GET /api/auth/me
