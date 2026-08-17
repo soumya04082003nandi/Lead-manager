@@ -20,3 +20,7 @@ const handleLeadCreation = (req,res)=>{
         })
     }
 }
+
+module.exports= {
+    handleLeadCreation
+}
