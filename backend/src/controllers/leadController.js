@@ -11,16 +11,15 @@ const handleLeadCreation = (req,res)=>{
             });
         }else{
             
+            
         }
         
     } catch (error) {
         return res.status(500).json({
             success:false,
-            message:"something went wrong."
+            message:"something went wrong ."
         })
     }
 }
 
-module.exports= {
-    handleLeadCreation
-}
+module.exports= {handleLeadCreation};

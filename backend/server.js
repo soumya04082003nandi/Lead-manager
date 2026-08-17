@@ -4,6 +4,7 @@ const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const connectDB = require("./src/config/db")
 const authRouter = require("./src/routes/auth.routes")
+const leadRouter = require("./src/routes/lead.routes")
 
 
 
@@ -13,6 +14,8 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+const PORT = process.env.PORT || 5000;
 
 app.use(cors({
     origin: process.env.CLIENT_URL,
@@ -24,12 +27,12 @@ app.use(express.json());
 
 //routes
 app.use("/api/auth", authRouter);
+app.use("/api/lead",leadRouter)
 
 app.get("/", (req, res) => {
     res.send("API is running");
 });
 
-const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log("Server is running on ", PORT);
