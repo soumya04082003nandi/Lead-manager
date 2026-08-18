@@ -1,25 +1,62 @@
-const leadModel= require("../models/leadModel")
+const leadModel = require("../models/leadModel");
 
-const handleLeadCreation = (req,res)=>{
+const handleLeadCreation = async (req, res) => {
     try {
-        const {name, email, phone, company, source, status, assignTo, createdBy} = req.body
+        const {
+            name,
+            email,
+            phone,
+            company,
+            source,
+            assignedTo
+        } = req.body;
 
-        if(!name || !email ){
+        // Validation
+        if (!name || !email) {
             return res.status(400).json({
                 success: false,
-                message: "All fields are required."
+                message: "Name and email are required."
             });
-        }else{
-            
-            
         }
-        
-    } catch (error) {
-        return res.status(500).json({
-            success:false,
-            message:"something went wrong ."
-        })
-    }
-}
 
-module.exports= {handleLeadCreation};
+        const normalizedEmail = email.toLowerCase().trim();
+
+        const newLead = await leadModel.create({
+            name: name.trim(),
+            email: normalizedEmail,
+            phone,
+            company,
+            source,
+            assignedTo: assignedTo || null,
+            // createdBy: req.user.id
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Lead created successfully.",
+            lead: {
+                id: newLead._id,
+                name: newLead.name,
+                email: newLead.email,
+                phone: newLead.phone,
+                company: newLead.company,
+                source: newLead.source,
+                status: newLead.status,
+                assignedTo: newLead.assignedTo,
+                createdBy: newLead.createdBy
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error."
+        });
+    }
+};
+
+module.exports = {
+    handleLeadCreation
+};
