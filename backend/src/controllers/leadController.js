@@ -1,6 +1,6 @@
 const leadModel = require("../models/leadModel");
 
-const handleLeadCreation = async (req, res) => {
+const handlePrivateLeadCreation = async (req, res) => {
     try {
         const {
             name,
@@ -28,7 +28,7 @@ const handleLeadCreation = async (req, res) => {
             company,
             source,
             assignedTo: assignedTo || null,
-            // createdBy: req.user.id
+            createdBy: req.user.id
         });
 
         return res.status(201).json({
@@ -58,5 +58,5 @@ const handleLeadCreation = async (req, res) => {
 };
 
 module.exports = {
-    handleLeadCreation
+    handlePrivateLeadCreation
 };

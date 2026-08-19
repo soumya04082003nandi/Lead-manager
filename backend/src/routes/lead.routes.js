@@ -12,8 +12,8 @@ const checkRole = require("../middleware/role");
  */
 leadRouter.post(
     "/create-lead",
-  
-    leadController.handleLeadCreation
+    isLoggedIn,
+    leadController.handlePrivateLeadCreation
 );
 
 module.exports = leadRouter;
