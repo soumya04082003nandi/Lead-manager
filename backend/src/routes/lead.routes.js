@@ -16,4 +16,15 @@ leadRouter.post(
     leadController.handlePrivateLeadCreation
 );
 
+/**
+ * @route POST /api/leads
+ * @description Create a new lead
+ * @access Private - Admin & Member
+ */
+leadRouter.post(
+    "/public/create-lead",
+    leadController.handlePublicLeadCreation
+);
+
+
 module.exports = leadRouter;
