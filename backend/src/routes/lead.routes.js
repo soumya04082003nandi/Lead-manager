@@ -3,6 +3,7 @@ const leadRouter = express.Router();
 
 const leadController = require("../controllers/leadController");
 const { isLoggedIn } = require("../middleware/auth");
+const {checkRole} = require("../middleware/role")
 const checkRole = require("../middleware/role");
 
 /**
@@ -12,7 +13,7 @@ const checkRole = require("../middleware/role");
  */
 leadRouter.post(
     "/create-lead",
-    isLoggedIn,
+    isLoggedIn,checkRole("admin","member"),
     leadController.handlePrivateLeadCreation
 );
 
