@@ -190,5 +190,6 @@ const handleGetLeads = async (req, res) =>{
 
 module.exports = {
     handlePrivateLeadCreation,
-    handlePublicLeadCreation
+    handlePublicLeadCreation,
+    handleGetLeads
 };

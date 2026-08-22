@@ -27,5 +27,16 @@ leadRouter.post(
     leadController.handlePublicLeadCreation
 );
 
+/**
+ * @route GET /api/lead
+ * @description Get all leads with pagination and filtering
+ * @access Private
+ */
+leadRouter.get(
+    "/",
+    isLoggedIn,
+    leadController.handleGetLeads
+);
+
 
 module.exports = leadRouter;
