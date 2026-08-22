@@ -156,7 +156,7 @@ const handleGetLeads = async (req, res) =>{
         const [leads,totalLeads]= await Promise.all([
             leadModel
             .find(filter)
-            .populate("assignTo","name email role")
+            .populate("assignedTo","name email role")
             .populate("createdBy","name email role")
             .sort({createdAt:-1})
             .skip(skip)
