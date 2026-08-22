@@ -105,6 +105,89 @@ const handlePublicLeadCreation = async (req,res) => {
         })
     }
 }
+
+const handleGetLeads = async (req, res) =>{
+    try {
+        const {page =1,limit=10,status,assignedTo,search}=req.query;
+
+        const pageNumber = Number(page);
+        const limitNumber= Number(limit);
+
+        const filter = {};
+
+        //status filter
+        if (status) {
+            filter.status=status;
+        }
+
+        //assignTo filter
+        if (assignedTo) {
+            filter.assignedTo=assignedTo;
+        }
+
+        //search filter
+        if (search) {
+            filter.$or=[
+                {
+                    name:{
+                        $regex:search,
+                        $options: "i"
+                    }
+                },
+                {
+                    email:{
+                        $regex:search,
+                        $options: "i"
+                    }
+
+                },
+                 {
+                    company:{
+                        $regex:search,
+                        $options: "i"
+                    }
+
+                },
+            ]
+        }
+
+        const skip = (pageNumber-1)* limitNumber;
+
+        const [leads,totalLeads]= await Promise.all([
+            leadModel
+            .find(filter)
+            .populate("assignTo","name email role")
+            .populate("createdBy","name email role")
+            .sort({createdAt:-1})
+            .skip(skip)
+            .limit(limitNumber),
+
+            leadModel.countDocuments(filter)
+        ]);
+
+        const totalPages = Math.ceil(totalLeads/limitNumber);
+
+        return res.status(200).json({
+            success:true,
+            message:"Leads fatched successfully.",
+            pagination:{
+                currentPage:pageNumber,
+                limit:limitNumber,
+                totalLeads,
+                totalPages
+            },
+            leads
+        });
+        
+    } catch(err){
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message:" Internal server error."
+        })
+    }
+}
+
 module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation
