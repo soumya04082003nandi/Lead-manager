@@ -195,7 +195,7 @@ const handleGetLeads = async (req, res) =>{
 const handleLeadById = async (req, res)=>{
     try {
         const {id}=req.params;
-        const lead = leadModel
+        const lead = await leadModel
         .findById(id)
         .populate("assignedTo","name email role")
         .populate("createdBy", "name email role")
