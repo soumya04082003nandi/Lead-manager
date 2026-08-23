@@ -1,5 +1,6 @@
 const leadModel = require("../models/leadModel");
 
+//controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
     try {
         const {
@@ -57,6 +58,7 @@ const handlePrivateLeadCreation = async (req, res) => {
     }
 };
 
+//controller to create lead by public through website
 const handlePublicLeadCreation = async (req,res) => {
     try{
         const { name, email, phone, company} = req.body;
@@ -106,6 +108,7 @@ const handlePublicLeadCreation = async (req,res) => {
     }
 }
 
+//controller to fetch all leads including filters
 const handleGetLeads = async (req, res) =>{
     try {
         const {page =1,limit=10,status,assignedTo,search}=req.query;
@@ -188,6 +191,7 @@ const handleGetLeads = async (req, res) =>{
     }
 }
 
+//controller to fetch lead by id
 const handleLeadById = async (req, res)=>{
     try {
         const {id}=req.params;
