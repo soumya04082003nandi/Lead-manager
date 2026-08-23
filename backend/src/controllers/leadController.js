@@ -188,8 +188,38 @@ const handleGetLeads = async (req, res) =>{
     }
 }
 
+const handleLeadById = async (req, res)=>{
+    try {
+        const {id}=req.params;
+        const lead = leadModel
+        .findById(id)
+        .populate("assignedTo","name email role")
+        .populate("createdBy", "name email role")
+
+        if(!lead){
+            return res.status(404).json({
+                success:false,
+                message:"Lead not found."
+            });
+        }
+
+        return res.status(200).json({
+            success:true,
+            message:"Lead featched successfully.",
+            lead
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error."
+        })
+    }
+}
+
 module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation,
-    handleGetLeads
+    handleGetLeads,
+    handleLeadById
 };
