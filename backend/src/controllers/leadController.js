@@ -221,6 +221,40 @@ const handleLeadById = async (req, res)=>{
     }
 }
 
+//controller to update leads
+const handleUpdateLeads= async (req,res)=>{
+    try {
+        const {id}=req.params;
+
+           const {
+            name,
+            email,
+            phone,
+            company,
+            source,
+            status,
+            assignedTo
+        } = req.body;
+
+        const lead = await leadModel.findById(id);
+
+        if(!lead){
+            return res.status(404).json({
+                success:false,
+                message:"Lead not found."
+            })
+        }
+
+    } catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error."
+        })
+    }
+}
+
 module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation,
