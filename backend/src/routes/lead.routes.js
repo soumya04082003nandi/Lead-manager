@@ -3,7 +3,8 @@ const leadRouter = express.Router();
 
 const leadController = require("../controllers/leadController");
 const { isLoggedIn } = require("../middleware/auth");
-const {checkRole} = require("../middleware/role")
+const {checkRole} = require("../middleware/role");
+const { check } = require("express-validator");
 
 
 /**
@@ -34,9 +35,23 @@ leadRouter.post(
  */
 leadRouter.get(
     "/",
-    isLoggedIn,
+    isLoggedIn,checkRole("admin","member"),
     leadController.handleGetLeads
 );
+
+/**
+ * @route GET /api/lead/:id
+ * @description Get lead by id
+ * @access Private
+ */
+leadRouter.get(
+    "/:id",
+    isLoggedIn,
+    checkRole("admin","member"),
+    leadController.handleLeadById
+)
+
+
 
 
 module.exports = leadRouter;
