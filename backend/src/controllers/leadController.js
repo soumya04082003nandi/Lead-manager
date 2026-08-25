@@ -245,6 +245,50 @@ const handleUpdateLeads= async (req,res)=>{
             })
         }
 
+        if (name !== undefined){
+            lead.name=name.trim();
+        }
+
+        if(email !== undefined){
+            lead.email=email.toLowerCase().trim();
+        }
+
+        if(phone !== undefined){
+            lead.phone.phone;
+        }
+
+        if (company !==undefined) {
+            lead.company=company;
+        }
+
+        if (source !==undefined) {
+            lead.source=source;
+        }
+
+        if(assignedTo !== undefined){
+            lead.assignedTo=assignedTo;
+        }
+
+        const updatedLead= await lead.save();
+
+        return res.status(200).json({
+            success:true,
+            message:"Lead updated successfully.",
+            lead :{
+                id:updatedLead._id,
+                name:updatedLead.name,
+                email:updatedLead.email,
+                company:updatedLead.company,
+                phone:updatedLead.phone,
+                source:updatedLead.source,
+                status:updatedLead.status,
+                assignedTo:updatedLead.assignedTo,
+                createdBy:updatedLead.createdBy,
+                createdAt:updatedLead.createdAt,
+                updatedAt:updatedLead.updatedAt
+            }
+        });
+
     } catch (err) {
         console.error(err);
 
@@ -259,5 +303,6 @@ module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation,
     handleGetLeads,
-    handleLeadById
+    handleLeadById,
+    
 };
