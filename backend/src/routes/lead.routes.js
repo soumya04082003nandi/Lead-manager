@@ -51,6 +51,20 @@ leadRouter.get(
     leadController.handleLeadById
 )
 
+/**
+ * @route PATCH /api/lead/:id
+ * @description Update leads by id
+ * @access Private
+ */
+leadRouter.patch(
+    "/:id",
+    isLoggedIn,
+    checkRole("admin","member"),
+    leadController.handleUpdateLeads
+)
+
+
+
 
 
 
