@@ -236,6 +236,20 @@ const handleUpdateLeads= async (req,res)=>{
             assignedTo
         } = req.body;
 
+        if (name === undefined &&
+            email === undefined &&
+            phone === undefined &&
+            company === undefined &&
+            source === undefined &&
+            status === undefined &&
+            assignedTo === undefined) {
+            return res.status(400).json({
+                success: false,
+                message: "At least one field is required to update."
+
+            })
+        }
+
         const lead = await leadModel.findById(id);
 
         if(!lead){
@@ -254,7 +268,7 @@ const handleUpdateLeads= async (req,res)=>{
         }
 
         if(phone !== undefined){
-            lead.phone.phone;
+            lead.phone = phone;
         }
 
         if (company !==undefined) {
@@ -263,6 +277,10 @@ const handleUpdateLeads= async (req,res)=>{
 
         if (source !==undefined) {
             lead.source=source;
+        }
+
+        if (status !== undefined) {
+            lead.status= status;
         }
 
         if(assignedTo !== undefined){
@@ -304,5 +322,6 @@ module.exports = {
     handlePublicLeadCreation,
     handleGetLeads,
     handleLeadById,
+    handleUpdateLeads
     
 };
