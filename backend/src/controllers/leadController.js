@@ -222,11 +222,11 @@ const handleLeadById = async (req, res)=>{
 }
 
 //controller to update leads
-const handleUpdateLeads= async (req,res)=>{
+const handleUpdateLeads = async (req, res) => {
     try {
-        const {id}=req.params;
+        const { id } = req.params;
 
-           const {
+        const {
             name,
             email,
             phone,
@@ -236,74 +236,88 @@ const handleUpdateLeads= async (req,res)=>{
             assignedTo
         } = req.body;
 
-        if (name === undefined &&
+        // Check if at least one field is provided
+        if (
+            name === undefined &&
             email === undefined &&
             phone === undefined &&
             company === undefined &&
             source === undefined &&
             status === undefined &&
-            assignedTo === undefined) {
+            assignedTo === undefined
+        ) {
             return res.status(400).json({
                 success: false,
                 message: "At least one field is required to update."
-
-            })
+            });
         }
 
+        // Find lead
         const lead = await leadModel.findById(id);
 
-        if(!lead){
+        if (!lead) {
             return res.status(404).json({
-                success:false,
-                message:"Lead not found."
-            })
+                success: false,
+                message: "Lead not found."
+            });
         }
 
-        if (name !== undefined){
-            lead.name=name.trim();
+        // Update normal fields
+        if (name !== undefined) {
+            lead.name = name.trim();
         }
 
-        if(email !== undefined){
-            lead.email=email.toLowerCase().trim();
+        if (email !== undefined) {
+            lead.email = email.toLowerCase().trim();
         }
 
-        if(phone !== undefined){
+        if (phone !== undefined) {
             lead.phone = phone;
         }
 
-        if (company !==undefined) {
-            lead.company=company;
+        if (company !== undefined) {
+            lead.company = company;
         }
 
-        if (source !==undefined) {
-            lead.source=source;
+        if (source !== undefined) {
+            lead.source = source;
         }
 
         if (status !== undefined) {
-            lead.status= status;
+            lead.status = status;
         }
 
-        if(assignedTo !== undefined){
-            lead.assignedTo=assignedTo;
+        // Assignment permission
+        if (assignedTo !== undefined) {
+
+            // Only admin can assign leads
+            if (req.user.role !== "admin") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Only admin can assign leads."
+                });
+            }
+
+            lead.assignedTo = assignedTo;
         }
 
-        const updatedLead= await lead.save();
+        const updatedLead = await lead.save();
 
         return res.status(200).json({
-            success:true,
-            message:"Lead updated successfully.",
-            lead :{
-                id:updatedLead._id,
-                name:updatedLead.name,
-                email:updatedLead.email,
-                company:updatedLead.company,
-                phone:updatedLead.phone,
-                source:updatedLead.source,
-                status:updatedLead.status,
-                assignedTo:updatedLead.assignedTo,
-                createdBy:updatedLead.createdBy,
-                createdAt:updatedLead.createdAt,
-                updatedAt:updatedLead.updatedAt
+            success: true,
+            message: "Lead updated successfully.",
+            lead: {
+                id: updatedLead._id,
+                name: updatedLead.name,
+                email: updatedLead.email,
+                company: updatedLead.company,
+                phone: updatedLead.phone,
+                source: updatedLead.source,
+                status: updatedLead.status,
+                assignedTo: updatedLead.assignedTo,
+                createdBy: updatedLead.createdBy,
+                createdAt: updatedLead.createdAt,
+                updatedAt: updatedLead.updatedAt
             }
         });
 
@@ -311,11 +325,11 @@ const handleUpdateLeads= async (req,res)=>{
         console.error(err);
 
         return res.status(500).json({
-            success:false,
-            message:"Internal Server Error."
-        })
+            success: false,
+            message: "Internal Server Error."
+        });
     }
-}
+};
 
 module.exports = {
     handlePrivateLeadCreation,
