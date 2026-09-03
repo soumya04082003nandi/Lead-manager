@@ -1,4 +1,5 @@
 const leadModel = require("../models/leadModel");
+const userModel= require("../models/userModel")
 
 //controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
