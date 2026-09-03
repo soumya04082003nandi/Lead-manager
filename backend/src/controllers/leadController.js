@@ -299,7 +299,23 @@ const handleUpdateLeads = async (req, res) => {
                 });
             }
 
-            lead.assignedTo = assignedTo;
+            // Check whether the user exists
+            const assignedUser = await userModel.findById(assignedTo);
+
+            if(!assignedUser){
+                return res.status(404).json({
+                    success:false;
+                    message: "Assigned user not found."
+                });
+            }
+            // Lead can only be assigned to a member
+            if(assignedUser.role !== "member"){
+                return res.status(400).json({
+                    success:false,
+                    message: "Lead can only be assigned to a member."
+                });
+            }
+            lead.assignedTo = assignedUser._id;
         }
 
         const updatedLead = await lead.save();
