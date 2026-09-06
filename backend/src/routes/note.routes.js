@@ -6,3 +6,5 @@ const {isLoggedIn} = require("../middleware/auth");
 
 
 noteRouter.post("/:id/create-notes",isLoggedIn,noteController.handleCreateNote)
+
+module.exports=noteRouter;

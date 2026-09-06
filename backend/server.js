@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser")
 const connectDB = require("./src/config/db")
 const authRouter = require("./src/routes/auth.routes")
 const leadRouter = require("./src/routes/lead.routes")
+const noteRouter = require("./src/routes/note.routes")
 
 
 
@@ -28,6 +29,8 @@ app.use(express.json());
 //routes
 app.use("/api/auth", authRouter);
 app.use("/api/lead",leadRouter)
+app.use("/api/lead",noteRouter)
+
 
 app.get("/", (req, res) => {
     res.send("API is running");
