@@ -6,6 +6,7 @@ const connectDB = require("./src/config/db")
 const authRouter = require("./src/routes/auth.routes")
 const leadRouter = require("./src/routes/lead.routes")
 const noteRouter = require("./src/routes/note.routes")
+const activityRouter = require("./src/routes/activity.routes");
 
 
 
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/lead",leadRouter)
 app.use("/api/lead",noteRouter)
+app.use("/api/lead", activityRouter);
 
 
 app.get("/", (req, res) => {
