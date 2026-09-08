@@ -1,5 +1,6 @@
 const leadModel = require("../models/leadModel");
 const userModel= require("../models/userModel")
+const activityModel = require("../models/activityModel")
 
 //controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
@@ -262,6 +263,10 @@ const handleUpdateLeads = async (req, res) => {
                 message: "Lead not found."
             });
         }
+        
+        //for activity creation
+        const oldStatus = lead.status;
+        const oldAssignedTo = lead.assignedTo;
 
         // Update normal fields
         if (name !== undefined) {
@@ -319,6 +324,27 @@ const handleUpdateLeads = async (req, res) => {
         }
 
         const updatedLead = await lead.save();
+
+        //create activity
+        if(status !== undefined && oldStatus !==status){
+            await activityModel.create({
+                lead: lead._id,
+                user: req.user.id,
+                action:"Status_shanged",
+                description: `Lead status changed from ${oldStatus} to ${status}`
+            })
+        }
+
+        if (
+            assignedTo !== undefined && String(oldAssignedTo) !== String(updatedLead.assignedTo)) 
+            {
+            await activityModel.create({
+                lead: updatedLead._id,
+                user: req.user.id,
+                action: "assigned",
+                description: "Lead assigned to a member"
+            });
+        }
 
         return res.status(200).json({
             success: true,
