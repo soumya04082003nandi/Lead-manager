@@ -13,6 +13,7 @@ const activitySchema = new mongoose.Schema({
         required:true
     },
     action:{
+        type:String,
         enum:[
             "created",
             "updated",
@@ -34,4 +35,4 @@ const activitySchema = new mongoose.Schema({
 );
 
 
-module.exports= mongoose.model("Activite",activitySchema);
+module.exports= mongoose.model("Activity",activitySchema);
