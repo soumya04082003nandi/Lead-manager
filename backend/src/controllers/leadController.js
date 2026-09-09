@@ -374,11 +374,53 @@ const handleUpdateLeads = async (req, res) => {
     }
 };
 
+//contrller to delete leads
+const handleDeleteLead = async (req, res) =>{
+    try {
+
+        const {id} = req.params;
+
+        const lead = await leadModel.findById(id);
+
+        
+        if (!lead) {
+            return res.status(404).json({
+                success: false,
+                message: "Lead not found."
+            });
+        }
+
+           // Create activity before deleting the lead
+        await activityModel.create({
+            lead: lead._id,
+            user: req.user.id,
+            action: "deleted",
+            description: "Lead deleted"
+        });
+
+        await leadModel.findByIdAndDelete(id)
+
+        return res.status(200).json({
+            success:true,
+            message:"Lead deleted successfully."
+        })
+        
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error."
+        })
+        
+    }
+}
+
 module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation,
     handleGetLeads,
     handleLeadById,
-    handleUpdateLeads
+    handleUpdateLeads,
+    handleDeleteLead
     
 };

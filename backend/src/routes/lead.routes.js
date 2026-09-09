@@ -63,6 +63,18 @@ leadRouter.patch(
     leadController.handleUpdateLeads
 )
 
+/**
+ * @Route DELETE /api/lead/:id/delete
+ * @description delete lead
+ * @access private
+ */
+leadRouter.delete(
+    "/:id/delete",
+    isLoggedIn,
+    checkRole("admin"),
+    leadController.handleDeleteLead
+)
+
 
 
 

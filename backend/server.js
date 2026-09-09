@@ -6,7 +6,7 @@ const connectDB = require("./src/config/db")
 const authRouter = require("./src/routes/auth.routes")
 const leadRouter = require("./src/routes/lead.routes")
 const noteRouter = require("./src/routes/note.routes")
-const activityRouter = require("./src/routes/activity.routes");
+const activityRouter = require("./src/routes/activity.route");
 
 
 
