@@ -8,7 +8,7 @@ const handleGetLeadActivities = async (req,res)=>{
 
         const activites= await activityModel
         .find({lead:id})
-        .populate("User","name email role")
+        .populate("user","name email role")
         .sort({createdAt: -1});
 
         return res.status(200).json({
