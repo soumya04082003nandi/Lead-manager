@@ -1,6 +1,7 @@
 const leadModel = require("../models/leadModel");
 const userModel= require("../models/userModel")
 const activityModel = require("../models/activityModel")
+const isValidObjectId = require("../utils/validateObjectId");
 
 //controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
@@ -197,6 +198,15 @@ const handleGetLeads = async (req, res) =>{
 const handleLeadById = async (req, res)=>{
     try {
         const {id}=req.params;
+
+        //Validating the id
+        if(!isValidObjectId(id)){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Lead Id."
+            })
+        }
+
         const lead = await leadModel
         .findById(id)
         .populate("assignedTo","name email role")
