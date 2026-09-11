@@ -195,7 +195,7 @@ const handleGetLeads = async (req, res) =>{
 }
 
 //controller to fetch lead by id
-const handleLeadById = async (req, res)=>{
+const handleGetLeadById = async (req, res)=>{
     try {
         const {id}=req.params;
 
@@ -446,7 +446,7 @@ module.exports = {
     handlePrivateLeadCreation,
     handlePublicLeadCreation,
     handleGetLeads,
-    handleLeadById,
+    handleGetLeadById,
     handleUpdateLeads,
     handleDeleteLead
     

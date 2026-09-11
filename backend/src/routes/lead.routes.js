@@ -48,7 +48,7 @@ leadRouter.get(
     "/:id",
     isLoggedIn,
     checkRole("admin","member"),
-    leadController.handleLeadById
+    leadController.handleGetLeadById
 )
 
 /**
