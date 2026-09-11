@@ -238,6 +238,14 @@ const handleUpdateLeads = async (req, res) => {
     try {
         const { id } = req.params;
 
+        //Validating the id
+        if(!isValidObjectId(id)){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Lead Id."
+            })
+        }
+
         const {
             name,
             email,
