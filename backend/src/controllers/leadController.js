@@ -16,7 +16,7 @@ const handlePrivateLeadCreation = async (req, res) => {
         } = req.body;
 
         // Validation
-        if (!name || !email) {
+        if (!name || !name.trim() || !email || !email.trim()) {
             return res.status(400).json({
                 success: false,
                 message: "Name and email are required."
@@ -24,6 +24,48 @@ const handlePrivateLeadCreation = async (req, res) => {
         }
 
         const normalizedEmail = email.toLowerCase().trim();
+        
+        //Validating correct email
+        const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+        if(!emailRegex.test(normalizedEmail)){
+            return res.status(400).json({
+                success:false,
+                message:"Please provide a valid email."
+            })
+        };
+
+        // Validate source
+        const allowedSources = [
+            "website",
+            "referral",
+            "social_media",
+            "advertisement",
+            "other"
+        ];
+
+        if (source !== undefined && !allowedSources.includes(source)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid lead source."
+            });
+        }
+
+        // Validate status
+        const allowedStatuses = [
+            "new",
+            "contacted",
+            "qualified",
+            "proposal",
+            "won",
+            "lost"
+        ];
+
+        if (status !== undefined && !allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid lead status."
+            });
+        }
 
         const newLead = await leadModel.create({
             name: name.trim(),
