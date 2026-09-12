@@ -67,6 +67,7 @@ const handlePrivateLeadCreation = async (req, res) => {
             });
         }
 
+        //creating lead
         const newLead = await leadModel.create({
             name: name.trim(),
             email: normalizedEmail,
