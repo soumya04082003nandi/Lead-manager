@@ -13,7 +13,7 @@ const handleGetLeadActivities = async (req,res)=>{
                 message:"Invalid lead id."
             })
         };
-
+    //Finding activty 
         const activites= await activityModel
         .find({lead:id})
         .populate("user","name email role")
