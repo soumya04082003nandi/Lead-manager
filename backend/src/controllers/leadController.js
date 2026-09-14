@@ -324,6 +324,16 @@ const handleUpdateLeads = async (req, res) => {
             assignedTo
         } = req.body;
 
+        //validating name
+        if (name !== undefined) {
+    if (!name.trim()) {
+        return res.status(400).json({
+            success: false,
+            message: "Name cannot be empty."
+        });
+    }
+}
+
         // Check if at least one field is provided
         if (
             name === undefined &&
