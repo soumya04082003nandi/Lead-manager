@@ -107,16 +107,41 @@ const handlePrivateLeadCreation = async (req, res) => {
 //controller to create lead by public through website
 const handlePublicLeadCreation = async (req,res) => {
     try{
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const { name, email, phone, company} = req.body;
 
-        if(!name || !email){
+        if(!name || !name.trim() || !email ||!email.trim()){
             return res.status(400).json({
                 success: false,
                 message: "Name and email are required."
             });
         }
 
+        //validating email
+        if(!emailRegex.test(email.trim())){
+            return res.status(400).json({
+                success:false,
+                message:"Please provide a valid email."
+            })
+        }
         const normalizedEmail = email.toLowerCase().trim();
+
+        //validating phone
+        if (phone !== undefined && typeof phone !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Phone must be a string."
+            });
+        }
+
+        //validating company name 
+        if (company !== undefined && typeof company !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Company must be a string."
+            });
+        }
 
         const newLead = await leadModel.create ({
             name:name.trim(),
