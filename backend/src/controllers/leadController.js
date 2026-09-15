@@ -3,6 +3,10 @@ const userModel= require("../models/userModel")
 const activityModel = require("../models/activityModel")
 const isValidObjectId = require("../utils/validateObjectId");
 
+
+//emailRegex
+const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+
 //controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
     try {
@@ -26,7 +30,6 @@ const handlePrivateLeadCreation = async (req, res) => {
         const normalizedEmail = email.toLowerCase().trim();
         
         //Validating correct email
-        const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
         if(!emailRegex.test(normalizedEmail)){
             return res.status(400).json({
                 success:false,
@@ -108,7 +111,6 @@ const handlePrivateLeadCreation = async (req, res) => {
 const handlePublicLeadCreation = async (req,res) => {
     try{
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const { name, email, phone, company} = req.body;
 
         if(!name || !name.trim() || !email ||!email.trim()){
@@ -370,6 +372,19 @@ const handleUpdateLeads = async (req, res) => {
         }
 
         if (email !== undefined) {
+            if(!email.trim()){
+                return res.status(400).json({
+                    success:false,
+                    message:"Email cannot be empty."
+                })
+            }
+
+            if(!emailRegex.test(email.trim())){
+                return res.status(400).json({
+                    success:false,
+                    message:"Please provide a valid email."
+                })
+            }
             lead.email = email.toLowerCase().trim();
         }
 
