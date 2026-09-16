@@ -6,6 +6,23 @@ const isValidObjectId = require("../utils/validateObjectId");
 
 //emailRegex
 const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+//allowedSource
+const allowedSources = [
+    "website",
+    "referral",
+    "social_media",
+    "advertisement",
+    "other"
+];
+//allowedStatus
+const allowedStatuses = [
+    "new",
+    "contacted",
+    "qualified",
+    "proposal",
+    "won",
+    "lost"
+];
 
 //controller to create lead by loggedin user
 const handlePrivateLeadCreation = async (req, res) => {
@@ -38,14 +55,6 @@ const handlePrivateLeadCreation = async (req, res) => {
         };
 
         // Validate source
-        const allowedSources = [
-            "website",
-            "referral",
-            "social_media",
-            "advertisement",
-            "other"
-        ];
-
         if (source !== undefined && !allowedSources.includes(source)) {
             return res.status(400).json({
                 success: false,
@@ -54,15 +63,6 @@ const handlePrivateLeadCreation = async (req, res) => {
         }
 
         // Validate status
-        const allowedStatuses = [
-            "new",
-            "contacted",
-            "qualified",
-            "proposal",
-            "won",
-            "lost"
-        ];
-
         if (status !== undefined && !allowedStatuses.includes(status)) {
             return res.status(400).json({
                 success: false,
@@ -396,16 +396,37 @@ const handleUpdateLeads = async (req, res) => {
             lead.company = company;
         }
 
-        if (source !== undefined) {
+
+        //validating and assigning sources 
+        if (source !== undefined ) {
+            if(!allowedSources.includes(source)){
+                return res.status(400).json({
+                    success:false,
+                    message:"Invalid lead Source."
+                })
+            }
             lead.source = source;
         }
 
+
         if (status !== undefined) {
+            if (!allowedStatuses.includes(status)) {
+                return res.status(400).json({
+                    success:false,
+                    message:"Invalid Lead Status."
+                })
+            }
             lead.status = status;
         }
 
         // Assignment permission
         if (assignedTo !== undefined) {
+            if(!isValidObjectId(assignedTo)){
+                return res.status(400).json({
+                    success:false,
+                    message:"Invalid assigned user ID."
+                })
+            }
 
             // Only admin can assign leads
             if (req.user.role !== "admin") {
