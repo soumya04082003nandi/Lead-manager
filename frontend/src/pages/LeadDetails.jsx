@@ -7,3 +7,5 @@ const LeadDetails = ()=>{
         </>
     )
 }
+
+export default LeadDetails
