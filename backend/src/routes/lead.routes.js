@@ -8,7 +8,7 @@ const { check } = require("express-validator");
 
 
 /**
- * @route POST /api/leads
+ * @route POST /api/lead/create-lead
  * @description Create a new lead
  * @access Private - Admin & Member
  */
@@ -19,7 +19,7 @@ leadRouter.post(
 );
 
 /**
- * @route POST /api/leads
+ * @route POST /api/lead/public/create-lead
  * @description Create a new lead
  * @access Private - Admin & Member
  */
