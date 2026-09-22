@@ -1,29 +1,27 @@
-import {Children, createContext,useContext,useEffect,useState} from "react"
-import {getCurrentUser} from "../services/auth.api"
-
+import { createContext, useEffect, useState } from "react";
+import { getCurrentUser } from "../services/auth.api";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({Children})=>{
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const checkAuth = async ()=>{
+    const checkAuth = async () => {
         try {
             const response = await getCurrentUser();
 
-            setUser(response.data.user)
-            
+            setUser(response.data.user);
         } catch (error) {
             setUser(null);
-        }finally{
+        } finally {
             setLoading(false);
         }
-    }
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         checkAuth();
-    },[]);
+    }, []);
 
     return (
         <AuthContext.Provider
@@ -34,11 +32,9 @@ export const AuthProvider = ({Children})=>{
                 checkAuth,
             }}
         >
-            {Children}
+            {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
-export const useAuth = ()=>{
-    return useContext(AuthContext);
-}
+export default AuthContext;
