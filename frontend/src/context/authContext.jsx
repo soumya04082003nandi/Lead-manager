@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getCurrentUser } from "../services/auth.api";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
         try {
             const response = await getCurrentUser();
+            console.log(response);
+            
 
             setUser(response.data.user);
         } catch (error) {
@@ -36,5 +38,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-export default AuthContext;
