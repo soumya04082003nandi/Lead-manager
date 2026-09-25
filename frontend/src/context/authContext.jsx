@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUser } from "../services/auth.api";
+import { getCurrentUser,loginUser } from "../services/auth.api";
 
 export const AuthContext = createContext();
 
@@ -21,6 +21,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // login user
+    const login = async(credential)=>{
+        const response = await loginUser(credential);
+
+        await checkAuth();
+
+        return response
+    }
+
     useEffect(() => {
         checkAuth();
     }, []);
@@ -32,6 +41,7 @@ export const AuthProvider = ({ children }) => {
                 setUser,
                 loading,
                 checkAuth,
+                login,
             }}
         >
             {children}
