@@ -1,49 +1,48 @@
-import {useState} from 'react'
-import {useNavigate} from "react-router-dom"
-import { useAuth } from '../hooks/useAuth'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
-
-const Login = ()=>{
+const Login = () => {
 
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login } = useAuth();
 
     const [formData, setFormData] = useState({
-        email:"",
-        password:"",
+        email: "",
+        password: "",
     });
 
-    const [error, setError]= useState("false");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    
-    const handleChange = (e)=>{
-        const {name, value}= e.target;
 
-        setFormData((prev)=>({
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
             ...prev,
-            [name]:value,
-        }))
-    }
+            [name]: value,
+        }));
+    };
 
-    const handleSubmit = async (e)=>{
-        e.prventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
         setError("");
-        setLoading(true)
+        setLoading(true);
 
         try {
             await login(formData);
 
-            navigate("/dashboard")
+            navigate("/dashboard");
         } catch (error) {
             setError(
                 error.response?.data?.message ||
                 "Login failed. Please check your credentials."
             );
-        }finally{
-            setLoading(false)
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div>
@@ -88,6 +87,4 @@ const Login = ()=>{
     );
 };
 
-
-
-export default Login
+export default Login;
