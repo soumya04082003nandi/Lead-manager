@@ -10,7 +10,7 @@ import ProtectedRoute from "./protectedRoutes";
 const AppRoutes = ()=>{
     return(
         <Routes>
-            <Route path="/" element={<h1>Landing page</h1>}/>
+            <Route path="/" element={<h1>Landing page</h1>}></Route>
             <Route path="/login" element={<Login/>} />
             <Route path="/register" element= {<Register/>}></Route>
 
