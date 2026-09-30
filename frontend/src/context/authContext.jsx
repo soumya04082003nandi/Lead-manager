@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUser,loginUser } from "../services/auth.api";
+import { getCurrentUser,loginUser,logoutUser } from "../services/auth.api";
 
 export const AuthContext = createContext();
 
@@ -30,6 +30,18 @@ export const AuthProvider = ({ children }) => {
         return response
     }
 
+    //logout user
+    const logout = ()=>{
+
+        try {
+            logoutUser();
+            setUser(null);
+
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+
+    }
     useEffect(() => {
         checkAuth();
     }, []);
@@ -42,6 +54,7 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 checkAuth,
                 login,
+                logout,
             }}
         >
             {children}
