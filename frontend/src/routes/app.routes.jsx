@@ -5,6 +5,7 @@ import Leads from "../pages/Leads";
 import Dashboard from "../pages/Dashboard";
 import LeadDetails from "../pages/LeadDetails";
 import ProtectedRoute from "./protectedRoutes";
+import AppLayout from "../components/AppLayout";
 
 
 const AppRoutes = ()=>{
@@ -14,10 +15,12 @@ const AppRoutes = ()=>{
             <Route path="/login" element={<Login/>} />
             <Route path="/register" element= {<Register/>}></Route>
 
-            <Route element={<ProtectedRoute/>} >
-                <Route path="/dashboard" element={<Dashboard />}></Route>
-                <Route path="/leads" element={<Leads />} />
-                <Route path="/leads/:id" element={<LeadDetails />}></Route>
+            <Route element={<ProtectedRoute />} >
+                <Route element={<AppLayout />}>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
+                    <Route path="/leads" element={<Leads />} />
+                    <Route path="/leads/:id" element={<LeadDetails />}></Route>
+                </Route>
             </Route>
 
 
