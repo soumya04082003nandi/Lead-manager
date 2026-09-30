@@ -1,7 +1,7 @@
 import { useAuth } from "../hooks/useAuth";
 
 const Dashboard = () => {
-    const { user, loading } = useAuth();
+    const { user, loading, logout } = useAuth();
 
     if (loading) {
         return <h1>Loading....</h1>;
@@ -18,6 +18,10 @@ const Dashboard = () => {
             <p>Name: {user.name}</p>
             <p>Email: {user.email}</p>
             <p>Role: {user.role}</p> 
+
+            <button onClick={logout}>
+                logout
+            </button>
         </div>
     );
 };
