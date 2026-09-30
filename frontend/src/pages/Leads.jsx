@@ -5,17 +5,27 @@ const Leads = () => {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [pagination, setPegination] = useState({
+        currentPage: 1,
+        limit: 10,
+        totalLeads: 0,
+        totalPages: 0
+    })
 
-    const fetchLeads = async () => {
+    const fetchLeads = async (page=1) => {
         try {
             setLoading(true);
             setError("");
 
-            const response = await getAllLeads();
+            const response = await getAllLeads({
+                page,
+                limit:10,
+            });
 
             console.log("LEADS RESPONSE:", response.data);
 
             setLeads(response.data.leads);
+            setPegination(response.data.pagination)
         } catch (error) {
             console.log("LEADS ERROR:", error);
 
@@ -92,6 +102,28 @@ const Leads = () => {
                     ))}
                 </tbody>
             </table>
+
+            <div>
+                <button
+                    onClick={() => fetchLeads(pagination.currentPage - 1)}
+                    disabled={pagination.currentPage === 1}
+                >
+                    Previous
+                </button>
+
+                <span>
+                    Page {pagination.currentPage} of {pagination.totalPages}
+                </span>
+
+                <button
+                    onClick={() => fetchLeads(pagination.currentPage + 1)}
+                    disabled={
+                        pagination.currentPage === pagination.totalPages
+                    }
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
