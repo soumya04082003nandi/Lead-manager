@@ -23,6 +23,7 @@ const Leads = () => {
             const response = await getAllLeads({
                 page,
                 limit:10,
+                status,
             });
 
             console.log("LEADS RESPONSE:", response.data);
@@ -43,7 +44,7 @@ const Leads = () => {
 
     useEffect(() => {
         fetchLeads();
-    }, []);
+    }, [status]);
 
     if (loading) {
         return <h1>Loading leads...</h1>;
@@ -58,6 +59,26 @@ const Leads = () => {
             <h1>Leads</h1>
 
             <p>Total Leads: {leads.length}</p>
+
+            <div>
+                <label htmlFor="status">
+                    Filter by Status:
+                </label>
+
+                <select
+                    id="status"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                >
+                    <option value="">All</option>
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="qualified">Qualified</option>
+                    <option value="proposal">Proposal</option>
+                    <option value="won">Won</option>
+                    <option value="lost">Lost</option>
+                </select>
+            </div>
 
             <table>
                 <thead>
