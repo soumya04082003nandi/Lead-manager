@@ -12,6 +12,9 @@ const Leads = () => {
         totalPages: 0
     })
 
+    //For filtering the leads
+    const [status, setStatus]= useState("")
+
     const fetchLeads = async (page=1) => {
         try {
             setLoading(true);
