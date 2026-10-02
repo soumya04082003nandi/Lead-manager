@@ -33,6 +33,7 @@ const handlePrivateLeadCreation = async (req, res) => {
             phone,
             company,
             source,
+            status,
             assignedTo
         } = req.body;
 
@@ -77,6 +78,7 @@ const handlePrivateLeadCreation = async (req, res) => {
             phone,
             company,
             source,
+            status:"new",
             assignedTo: assignedTo || null,
             createdBy: req.user.id
         });
