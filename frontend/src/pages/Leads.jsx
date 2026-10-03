@@ -5,7 +5,7 @@ const Leads = () => {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [pagination, setPegination] = useState({
+    const [pagination, setPagination] = useState({
         currentPage: 1,
         limit: 10,
         totalLeads: 0,
@@ -14,6 +14,7 @@ const Leads = () => {
 
     //For filtering the leads
     const [status, setStatus]= useState("")
+    const [source, setSource] = useState("")
 
     const fetchLeads = async (page=1) => {
         try {
@@ -24,12 +25,13 @@ const Leads = () => {
                 page,
                 limit:10,
                 status,
+                source,
             });
 
             console.log("LEADS RESPONSE:", response.data);
 
             setLeads(response.data.leads);
-            setPegination(response.data.pagination)
+            setPagination(response.data.pagination)
         } catch (error) {
             console.log("LEADS ERROR:", error);
 
@@ -44,7 +46,7 @@ const Leads = () => {
 
     useEffect(() => {
         fetchLeads();
-    }, [status]);
+    }, [status, source]);
 
     if (loading) {
         return <h1>Loading leads...</h1>;
@@ -61,10 +63,31 @@ const Leads = () => {
             <p>Total Leads: {leads.length}</p>
 
             <div>
+                
+            </div>
+
+            <div>
+
+                <label htmlFor="source">Filter by Source</label>
+
+                <select  
+                id="source"
+                value={source}
+                onChange={(e)=>setSource(e.target.value)}
+                >
+                    <option value="">All</option>
+                    <option value="website">Website</option>
+                    <option value="referral">Referral</option>
+                    <option value="social_media">Social Media</option>
+                    <option value="advertisement">Advertisement</option>
+                    <option value="other">Other</option>
+
+                </select> 
                 <label htmlFor="status">
                     Filter by Status:
                 </label>
 
+                //filter by status
                 <select
                     id="status"
                     value={status}
