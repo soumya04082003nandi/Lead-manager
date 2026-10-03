@@ -186,7 +186,7 @@ const handlePublicLeadCreation = async (req,res) => {
 //controller to fetch all leads including filters
 const handleGetLeads = async (req, res) =>{
     try {
-        const {page =1,limit=10,status,assignedTo,search}=req.query;
+        const {page =1,limit=10,status,assignedTo,source,search}=req.query;
 
         const pageNumber = Number(page);
         const limitNumber= Number(limit);
@@ -196,6 +196,11 @@ const handleGetLeads = async (req, res) =>{
         //status filter
         if (status) {
             filter.status=status;
+        }
+
+        //source filter
+        if(source){
+            filter.source=source;
         }
 
         //assignTo filter
