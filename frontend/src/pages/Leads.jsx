@@ -82,7 +82,7 @@ const Leads = () => {
                     <option value="advertisement">Advertisement</option>
                     <option value="other">Other</option>
 
-                </select> 
+                </select>  
                 <label htmlFor="status">
                     Filter by Status:
                 </label>
