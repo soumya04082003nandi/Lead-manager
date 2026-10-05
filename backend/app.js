@@ -7,6 +7,7 @@ const authRouter = require("./src/routes/auth.routes");
 const leadRouter = require("./src/routes/lead.routes");
 const noteRouter = require("./src/routes/note.routes");
 const activityRouter = require("./src/routes/activity.route");
+const userRouter = require("./src/routes/user.route")
 
 const app = express();
 dotenv.config()
@@ -25,6 +26,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/lead", leadRouter);
 app.use("/api/lead", noteRouter);
 app.use("/api/lead", activityRouter);
+app.use("/api/users", userRouter )
 
 app.get("/", (req, res) => {
     res.send("API is running");
