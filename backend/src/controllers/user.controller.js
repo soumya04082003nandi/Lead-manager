@@ -2,7 +2,7 @@ const userModel = require("../models/userModel");
 
 const handleGetUsers = async (req,res)=>{
     try {
-        const users = userModel.find(
+        const users = await userModel.find(
             {role:"member"},
             "name email role"
         )
