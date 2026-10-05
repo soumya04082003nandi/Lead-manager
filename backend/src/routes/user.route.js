@@ -7,4 +7,4 @@ const userController= require("../controllers/user.controller");
 userRouter.get("/",isLoggedIn,userController.handleGetUsers)
 
 
-module.exports=userController
+module.exports=userRouter
