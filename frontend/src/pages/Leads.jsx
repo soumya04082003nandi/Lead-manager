@@ -6,6 +6,7 @@ const Leads = () => {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [users, setUsers] = useState([]);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         limit: 10,
@@ -16,7 +17,7 @@ const Leads = () => {
     //For filtering the leads
     const [status, setStatus]= useState("")
     const [source, setSource] = useState("")
-    const [users, setUsers] = useState([]);
+    const [assignedTo, setAssignedTo] = useState("")
 
     const fetchUsers = async ()=>{
         try {
@@ -42,6 +43,7 @@ const Leads = () => {
                 limit:10,
                 status,
                 source,
+                assignedTo,
             });
 
             console.log("LEADS RESPONSE:", response.data);
@@ -62,7 +64,7 @@ const Leads = () => {
 
     useEffect(() => {
         fetchLeads();
-    }, [status, source]);
+    }, [status, source, assignedTo]);
 
     if (loading) {
         return <h1>Loading leads...</h1>;
@@ -77,10 +79,6 @@ const Leads = () => {
             <h1>Leads</h1>
 
             <p>Total Leads: {leads.length}</p>
-
-            <div>
-                
-            </div>
 
             <div>
 
@@ -116,6 +114,26 @@ const Leads = () => {
                     <option value="proposal">Proposal</option>
                     <option value="won">Won</option>
                     <option value="lost">Lost</option>
+                </select>
+
+                //filter by assignTo
+
+                <label htmlFor="assignedTo">
+                    Filter by Assigned To:
+                </label>
+
+                <select
+                    id="assignedTo"
+                    value={assignedTo}
+                    onChange={(e) => setAssignedTo(e.target.value)}
+                >
+                    <option value="">All</option>
+
+                    {users.map((user) => (
+                        <option key={user._id} value={user._id}>
+                            {user.name}
+                        </option>
+                    ))}
                 </select>
             </div>
 
