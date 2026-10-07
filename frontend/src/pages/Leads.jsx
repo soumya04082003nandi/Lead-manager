@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllLeads } from "../services/lead.api";
+import { getUsers } from "../services/user.api";
 
 const Leads = () => {
     const [leads, setLeads] = useState([]);
@@ -15,6 +16,21 @@ const Leads = () => {
     //For filtering the leads
     const [status, setStatus]= useState("")
     const [source, setSource] = useState("")
+    const [users, setUsers] = useState([]);
+
+    const fetchUsers = async ()=>{
+        try {
+            const response = await getUsers();
+
+            setUsers(response.data.users);
+        } catch (err) {
+            console.log("USERS ERROR". err)
+        }
+    }
+
+    useEffect(()=>{
+        fetchUsers();
+    },[]);
 
     const fetchLeads = async (page=1) => {
         try {
