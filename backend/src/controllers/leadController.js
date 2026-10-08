@@ -224,6 +224,12 @@ const handleGetLeads = async (req, res) =>{
                     }
 
                 },
+                {
+                    phone:{
+                        $regex:search,
+                        $options:"i"
+                    }
+                },
                  {
                     company:{
                         $regex:search,
@@ -252,7 +258,7 @@ const handleGetLeads = async (req, res) =>{
 
         return res.status(200).json({
             success:true,
-            message:"Leads fatched successfully.",
+            message:"Leads fetched successfully.",
             pagination:{
                 currentPage:pageNumber,
                 limit:limitNumber,
