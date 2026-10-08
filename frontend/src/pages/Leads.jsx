@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllLeads } from "../services/lead.api";
 import { getUsers } from "../services/user.api";
+import LeadTable from "../components/LeadTable";
 
 const Leads = () => {
     const [leads, setLeads] = useState([]);
@@ -18,6 +19,7 @@ const Leads = () => {
     const [status, setStatus]= useState("")
     const [source, setSource] = useState("")
     const [assignedTo, setAssignedTo] = useState("")
+    const [search, setSearch] = useState("")
 
     const fetchUsers = async ()=>{
         try {
@@ -44,6 +46,7 @@ const Leads = () => {
                 status,
                 source,
                 assignedTo,
+                search,
             });
 
             console.log("LEADS RESPONSE:", response.data);
@@ -64,11 +67,11 @@ const Leads = () => {
 
     useEffect(() => {
         fetchLeads();
-    }, [status, source, assignedTo]);
+    }, [status, source, assignedTo, search]);
 
-    if (loading) {
-        return <h1>Loading leads...</h1>;
-    }
+    // if (loading) {
+    //     return <h1>Loading leads...</h1>;
+    // }
 
     if (error) {
         return <h1>{error}</h1>;
@@ -135,54 +138,22 @@ const Leads = () => {
                         </option>
                     ))}
                 </select>
+
+                //filter by search
+                <label htmlFor="search">
+                    Search Leads:
+                </label>
+
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Search by name, email, phone or company"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Company</th>
-                        <th>Source</th>
-                        <th>Status</th>
-                        <th>Assigned To</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {leads.map((lead) => (
-                        <tr key={lead._id}>
-                            <td>{lead.name}</td>
-
-                            <td>{lead.email}</td>
-
-                            <td>{lead.phone || "-"}</td>
-
-                            <td>{lead.company || "-"}</td>
-
-                            <td>{lead.source}</td>
-
-                            <td>{lead.status}</td>
-
-                            <td>
-                                {lead.assignedTo?.name || "Unassigned"}
-                            </td>
-
-                            <td>
-                                <button>
-                                    View
-                                </button>
-
-                                <button>
-                                    Edit
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <LeadTable leads={leads}/>
 
             <div>
                 <button
