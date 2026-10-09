@@ -1,7 +1,8 @@
-
+import {useNavigate} from "react-router-dom"
 
 const LeadTable =({leads})=>{
 
+    const navigate = useNavigate();
     return(
         <table>
             <thead>
@@ -28,7 +29,7 @@ const LeadTable =({leads})=>{
                         <td>{lead.assignedTo || "Unassigned"}</td>
 
                         <td>
-                            <button>
+                            <button onClick={()=> navigate(`/leads/${lead._id}1`)}>
                                 View
                             </button>
 
