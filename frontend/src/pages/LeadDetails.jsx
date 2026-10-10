@@ -4,8 +4,9 @@ import { getLeadById } from "../services/lead.api"
 
 const LeadDetails = ()=>{
     const {id} = useParams();
+    const navigate = useNavigate();
 
-    const [lead, setLeads] = useState(null);
+    const [lead, setLead] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("")
 
@@ -15,8 +16,9 @@ const LeadDetails = ()=>{
             setError("")
 
             const response = await getLeadById(id);
-
-            setLeads(response.data.lead);
+            console.log(response, "from leadDetails");
+            
+            setLead(response.data.lead);
         } catch (err) {
             setError(
                 err.response?.data?.message || "Failed to fetch lead details."
@@ -30,9 +32,22 @@ const LeadDetails = ()=>{
         fetchLead();
     },[id])
 
+    if(loading){
+        return(
+            <p> Loading lead details...</p>
+        )
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
+
+    if (!lead) {
+        return <p>Lead not found.</p>;
+    }
     return(
         <div>
-            <button onClick={() => navigate("/leads:id")}>
+            <button onClick={() => navigate("/leads")}>
                 Back to Leads
             </button>
 
