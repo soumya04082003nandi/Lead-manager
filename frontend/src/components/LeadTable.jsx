@@ -29,7 +29,7 @@ const LeadTable =({leads})=>{
                         <td>{lead.assignedTo || "Unassigned"}</td>
 
                         <td>
-                            <button onClick={()=> navigate(`/leads/${lead._id}1`)}>
+                            <button onClick={()=> navigate(`/leads/${lead._id}`)}>
                                 View
                             </button>
 
