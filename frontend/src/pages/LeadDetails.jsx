@@ -34,7 +34,7 @@ const LeadDetails = ()=>{
 
     if(loading){
         return(
-            <p> Loading lead details...</p>
+            <p> Loading Lead Details...</p>
         )
     }
 
