@@ -2,6 +2,7 @@ import { useEffect,useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getLeadById } from "../services/lead.api"
 
+
 const LeadDetails = ()=>{
     const {id} = useParams();
     const navigate = useNavigate();
