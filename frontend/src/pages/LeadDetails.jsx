@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getLeadById } from "../services/lead.api"
+import { getLeadActivities } from "../services/activity.api"
 
 
 const LeadDetails = ()=>{
@@ -11,6 +12,13 @@ const LeadDetails = ()=>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("")
 
+    //for activities
+    const [activities, setActivities] = useState([]);
+    const [activityLoading, setActivityLoading] = useState(true);
+    const [activityError, setActivityError] = useState("")
+
+
+    //fetch leads
     const fetchLead = async ()=>{
         try {
             setLoading(true);
@@ -29,8 +37,31 @@ const LeadDetails = ()=>{
         }
     }
 
+    //fetch activities
+    const fetchActivities = async ()=>{
+        try {
+            setActivityLoading(true);
+            setActivityError("");
+
+            const response= await getLeadActivities(id);
+
+            console.log("Activity API Response:", response.data);
+            
+            setActivities(response.data.activities || []);
+            
+        } catch (err) {
+            setActivityError(
+                err.response?.data?.message ||
+            "Failed to fetch activity history."
+            );
+        }finally{
+            setActivityLoading(false)
+        };
+    }
+
     useEffect(()=>{
         fetchLead();
+        fetchActivities();
     },[id])
 
     if(loading){
@@ -86,6 +117,40 @@ const LeadDetails = ()=>{
                     ? new Date(lead.updatedAt).toLocaleString()
                     : "-"}
             </p>
+
+            <hr />
+
+            <h2>Activity Trail</h2>
+
+            {activityLoading && <p>Loading activity history...</p>}
+
+            {activityError && <p>{activityError}</p>}
+
+            {!activityLoading && !activityError && activities.length === 0 && (
+                <p>No activity recorded for this lead yet.</p>
+            )}
+
+            {!activityLoading && !activityError && activities.length > 0 && (
+                <div>
+                    {activities.map((activity) => (
+                        <div key={activity._id} style={{ marginBottom: "20px" }}>
+                            <h3>{activity.action}</h3>
+
+                            <p>{activity.description}</p>
+
+                            <p>
+                                By: {activity.user?.name || "Unknown user"}
+                            </p>
+
+                            <small>
+                                {activity.createdAt
+                                    ? new Date(activity.createdAt).toLocaleString()
+                                    : "-"}
+                            </small>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
