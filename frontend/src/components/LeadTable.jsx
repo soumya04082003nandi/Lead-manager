@@ -1,9 +1,9 @@
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
-const LeadTable =({leads})=>{
+const LeadTable = ({ leads }) => {
 
     const navigate = useNavigate();
-    return(
+    return (
         <table>
             <thead>
                 <tr>
@@ -18,29 +18,29 @@ const LeadTable =({leads})=>{
             </thead>
 
             <tbody>
-                {leads.map((lead)=>(
-                    <tr key={lead._id} >
-                        <td>{lead.name}</td>
-                        <td>{lead.email}</td>
-                        <td>{lead.phone || "-"}</td>
-                        <td>{lead.company || "-"}</td>
-                        <td>{lead.source}</td>
-                        <td>{lead.status}</td>
-                        <td>{lead.assignedTo || "Unassigned"}</td>
+                {leads.map((lead) => {
+                    // console.log(lead);
 
-                        <td>
-                            <button onClick={()=> navigate(`/leads/${lead._id}`)}>
-                                View
-                            </button>
+                    return (
+                        <tr key={lead._id}>
+                            <td>{lead.name}</td>
+                            <td>{lead.email}</td>
+                            <td>{lead.phone || "-"}</td>
+                            <td>{lead.company || "-"}</td>
+                            <td>{lead.source}</td>
+                            <td>{lead.status}</td>
+                            <td>{lead.assignedTo?.name || "Unassigned"}</td>
 
-                            <button>
-                                Edit
-                            </button>
-                            
-                        </td>
+                            <td>
+                                <button onClick={() => navigate(`/leads/${lead._id}`)}>
+                                    View
+                                </button>
 
-                    </tr>
-                ))}
+                                <button>Edit</button>
+                            </td>
+                        </tr>
+                    );
+                })}
             </tbody>
         </table>
     )
