@@ -25,7 +25,7 @@ const LeadDetails = ()=>{
             setError("")
 
             const response = await getLeadById(id);
-            console.log(response, "from leadDetails");
+            // console.log(response.data, "from leadDetails");
             
             setLead(response.data.lead);
         } catch (err) {
@@ -45,7 +45,7 @@ const LeadDetails = ()=>{
 
             const response= await getLeadActivities(id);
 
-            console.log("Activity API Response:", response.data);
+            // console.log("Activity API Response:", response.data);
             
             setActivities(response.data.activities || []);
             
