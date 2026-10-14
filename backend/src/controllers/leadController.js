@@ -483,11 +483,19 @@ const handleUpdateLeads = async (req, res) => {
         if (
             assignedTo !== undefined && String(oldAssignedTo) !== String(updatedLead.assignedTo)) 
             {
+            
+                //get the name of assigned member's name 
+                const assignedUser = await userModel.findById(
+                    req.user.id
+                ).select("name")
+
+                console.log(assignedUser);
+                
             await activityModel.create({
                 lead: updatedLead._id,
                 user: req.user.id,
                 action: "assigned",
-                description: "Lead assigned to a member"
+                description: `Lead assigned to ${assignedUser?.name } `
             });
         }
 
