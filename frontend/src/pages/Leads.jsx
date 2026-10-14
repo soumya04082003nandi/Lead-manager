@@ -49,7 +49,7 @@ const Leads = () => {
                 search,
             });
 
-            console.log("LEADS RESPONSE:", response.data);
+            // console.log("LEADS RESPONSE:", response.data);
 
             setLeads(response.data.leads);
             setPagination(response.data.pagination)
