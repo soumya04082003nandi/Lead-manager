@@ -14,15 +14,17 @@ const handleGetLeadActivities = async (req,res)=>{
             })
         };
     //Finding activty 
-        const activites= await activityModel
+        const activities= await activityModel
         .find({lead:id})
         .populate("user","name email role")
         .sort({createdAt: -1});
 
+        console.log(activities," from activty controller");
+        
         return res.status(200).json({
             success:true,
-            count:activites.length,
-            activites
+            count:activities.length,
+            activities
         })
         
     } catch (err) {
