@@ -475,7 +475,7 @@ const handleUpdateLeads = async (req, res) => {
             await activityModel.create({
                 lead: lead._id,
                 user: req.user.id,
-                action:"Status_shanged",
+                action:"status_changed",
                 description: `Lead status changed from ${oldStatus} to ${status}`
             })
         }
