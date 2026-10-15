@@ -486,7 +486,7 @@ const handleUpdateLeads = async (req, res) => {
             
                 //get the name of assigned member's name 
                 const assignedUser = await userModel.findById(
-                    req.user.id
+                    updatedLead.assignedTo
                 ).select("name")
 
                 console.log(assignedUser);
