@@ -1,5 +1,6 @@
 const noteModel = require("../models/noteModel")
 const leadModel= require("../models/leadModel")
+const {isValidObjectId} = require("../utils/validateObjectId")
 
 const handleCreateNote = async (req, res)=>{
     try {
@@ -56,7 +57,40 @@ const handleCreateNote = async (req, res)=>{
     }
 }
 
+const handleGetLeadNotes = async (req, res)=>{
+    try {
+        const {id} = req.params;
 
+        //validate the lead id
+        if(!isValidObjectId(id)){
+            return res.status(400).json({
+                success: false,
+                message:"Invalid lead ID."
+            })
+        }
+
+        //fetch notes of that lead
+        const note = await noteModel
+        .find({lead:id})
+        .populate("user", "name email role")
+        .sort({createdAt: -1})
+
+         return res.status(200).json({
+            success: true,
+            message: "Notes fetched successfully.",
+            count: notes.length,
+            notes,
+        });
+        
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error."
+        })
+    }
+}
 
 module.exports={
     handleCreateNote
