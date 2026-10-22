@@ -89,9 +89,6 @@ const handleGetLeadNotes = async (req, res)=>{
             success:false,
             message:"Internal Server Error."
         })    
-        
-        
-        
     }
 }
 
