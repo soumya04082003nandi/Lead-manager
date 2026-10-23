@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
         return response
     }
 
+
+    
     //logout user
     const logout = ()=>{
 
