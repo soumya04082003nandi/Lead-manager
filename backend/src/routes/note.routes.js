@@ -5,8 +5,13 @@ const noteController = require("../controllers/note.controller");
 const {isLoggedIn} = require("../middleware/auth");
 
 
-noteRouter.post("/:id/create-notes",
+noteRouter.post(
+    "/:id/create-notes",
     isLoggedIn,
-    noteController.handleCreateNote)
+    noteController.handleCreateNote
+)
+
+noteRouter.get("/:id/notes", isLoggedIn, noteController.handleGetLeadNotes)
+
 
 module.exports=noteRouter;
