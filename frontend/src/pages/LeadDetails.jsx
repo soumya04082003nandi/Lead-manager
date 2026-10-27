@@ -1,73 +1,130 @@
-import { useEffect,useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
-import { getLeadById } from "../services/lead.api"
-import { getLeadActivities } from "../services/activity.api"
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
+import { getLeadById } from "../services/lead.api";
+import { getLeadActivities } from "../services/activity.api";
+import { createNote, getLeadNotes } from "../services/note.api";
 
-const LeadDetails = ()=>{
-    const {id} = useParams();
+const LeadDetails = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
 
+    // Lead details
     const [lead, setLead] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
 
-    //for activities
+    // Activities
     const [activities, setActivities] = useState([]);
     const [activityLoading, setActivityLoading] = useState(true);
-    const [activityError, setActivityError] = useState("")
+    const [activityError, setActivityError] = useState("");
 
+    // Notes
+    const [notes, setNotes] = useState([]);
+    const [notesLoading, setNotesLoading] = useState(true);
+    const [notesError, setNotesError] = useState("");
+    const [noteContent, setNoteContent] = useState("");
+    const [noteSubmitting, setNoteSubmitting] = useState(false);
+    const [noteMessage, setNoteMessage] = useState("");
 
-    //fetch leads
-    const fetchLead = async ()=>{
+    // Fetch lead details
+    const fetchLead = async () => {
         try {
             setLoading(true);
-            setError("")
+            setError("");
 
             const response = await getLeadById(id);
-            // console.log(response.data, "from leadDetails");
-            
             setLead(response.data.lead);
         } catch (err) {
             setError(
-                err.response?.data?.message || "Failed to fetch lead details."
-            )
-        }finally{
-            setLoading(false)
+                err.response?.data?.message ||
+                    "Failed to fetch lead details."
+            );
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
-    //fetch activities
-    const fetchActivities = async ()=>{
+    // Fetch activities
+    const fetchActivities = async () => {
         try {
             setActivityLoading(true);
             setActivityError("");
 
-            const response= await getLeadActivities(id);
-
-            // console.log("Activity API Response:", response.data);
-            
+            const response = await getLeadActivities(id);
             setActivities(response.data.activities || []);
-            
         } catch (err) {
             setActivityError(
                 err.response?.data?.message ||
-            "Failed to fetch activity history."
+                    "Failed to fetch activity history."
             );
-        }finally{
-            setActivityLoading(false)
-        };
-    }
+        } finally {
+            setActivityLoading(false);
+        }
+    };
 
-    useEffect(()=>{
+    // Fetch notes
+    const fetchNotes = async () => {
+        try {
+            setNotesLoading(true);
+            setNotesError("");
+
+            const response = await getLeadNotes(id);
+            setNotes(response.data.notes || []);
+        } catch (err) {
+            setNotesError(
+                err.response?.data?.message ||
+                    "Failed to fetch notes."
+            );
+        } finally {
+            setNotesLoading(false);
+        }
+    };
+
+    // Load lead, activities, and notes
+    useEffect(() => {
         fetchLead();
         fetchActivities();
-    },[id])
+        fetchNotes();
+    }, [id]);
 
-    if(loading){
-        return(
-            <p> Loading Lead Details...</p>
-        )
+    // Create a note
+    const handleAddNote = async (e) => {
+        e.preventDefault();
+
+        const content = noteContent.trim();
+
+        if (!content) {
+            setNoteMessage("Please enter a note before submitting.");
+            return;
+        }
+
+        try {
+            setNoteSubmitting(true);
+            setNoteMessage("");
+
+            await createNote(id, { content });
+
+            setNoteContent("");
+            setNoteMessage("Note added successfully.");
+
+            // Refresh notes and activities
+            await Promise.all([
+                fetchNotes(),
+                fetchActivities(),
+            ]);
+        } catch (err) {
+            setNoteMessage(
+                err.response?.data?.message ||
+                    "Failed to add note."
+            );
+        } finally {
+            setNoteSubmitting(false);
+        }
+    };
+
+    if (loading) {
+        return <p>Loading Lead Details...</p>;
     }
 
     if (error) {
@@ -77,7 +134,8 @@ const LeadDetails = ()=>{
     if (!lead) {
         return <p>Lead not found.</p>;
     }
-    return(
+
+    return (
         <div>
             <button onClick={() => navigate("/leads")}>
                 Back to Leads
@@ -85,6 +143,7 @@ const LeadDetails = ()=>{
 
             <h1>{lead.name}</h1>
 
+            {/* Lead Details */}
             <h2>Contact Information</h2>
 
             <p>Email: {lead.email}</p>
@@ -120,39 +179,137 @@ const LeadDetails = ()=>{
 
             <hr />
 
-            <h2>Activity Trail</h2>
+            {/* Notes Section */}
+            <section>
+                <h2>Notes</h2>
 
-            {activityLoading && <p>Loading activity history...</p>}
+                <form onSubmit={handleAddNote}>
+                    <textarea
+                        value={noteContent}
+                        onChange={(e) => setNoteContent(e.target.value)}
+                        placeholder="Write a note about this lead..."
+                        rows={4}
+                        required
+                        disabled={noteSubmitting}
+                        style={{
+                            display: "block",
+                            width: "100%",
+                            maxWidth: "600px",
+                            marginBottom: "10px",
+                            padding: "10px",
+                        }}
+                    />
 
-            {activityError && <p>{activityError}</p>}
+                    <button
+                        type="submit"
+                        disabled={noteSubmitting || !noteContent.trim()}
+                    >
+                        {noteSubmitting ? "Adding Note..." : "Add Note"}
+                    </button>
+                </form>
 
-            {!activityLoading && !activityError && activities.length === 0 && (
-                <p>No activity recorded for this lead yet.</p>
-            )}
+                {noteMessage && <p>{noteMessage}</p>}
 
-            {!activityLoading && !activityError && activities.length > 0 && (
-                <div>
-                    {activities.map((activity) => (
-                        <div key={activity._id} style={{ marginBottom: "20px" }}>
-                            <h3>{activity.action}</h3>
+                {notesLoading && <p>Loading notes...</p>}
 
-                            <p>{activity.description}</p>
+                {notesError && (
+                    <p role="alert">{notesError}</p>
+                )}
 
-                            <p>
-                                By: {activity.user?.name || "Unknown user"}
-                            </p>
+                {!notesLoading &&
+                    !notesError &&
+                    notes.length === 0 && (
+                        <p>No notes added yet.</p>
+                    )}
 
-                            <small>
-                                {activity.createdAt
-                                    ? new Date(activity.createdAt).toLocaleString()
-                                    : "-"}
-                            </small>
+                {!notesLoading &&
+                    !notesError &&
+                    notes.length > 0 && (
+                        <div>
+                            {notes.map((note) => (
+                                <article
+                                    key={note._id}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        padding: "12px",
+                                        marginTop: "12px",
+                                        maxWidth: "600px",
+                                        borderRadius: "6px",
+                                    }}
+                                >
+                                    <p>{note.content}</p>
+
+                                    <small>
+                                        By: {note.user?.name || "Unknown user"}
+                                    </small>
+
+                                    <br />
+
+                                    <small>
+                                        {note.createdAt
+                                            ? new Date(
+                                                  note.createdAt
+                                              ).toLocaleString()
+                                            : "-"}
+                                    </small>
+                                </article>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    )
-}
+                    )}
+            </section>
 
-export default LeadDetails
+            <hr />
+
+            {/* Activity Trail */}
+            <section>
+                <h2>Activity Trail</h2>
+
+                {activityLoading && (
+                    <p>Loading activity history...</p>
+                )}
+
+                {activityError && (
+                    <p role="alert">{activityError}</p>
+                )}
+
+                {!activityLoading &&
+                    !activityError &&
+                    activities.length === 0 && (
+                        <p>No activity recorded for this lead yet.</p>
+                    )}
+
+                {!activityLoading &&
+                    !activityError &&
+                    activities.length > 0 && (
+                        <div>
+                            {activities.map((activity) => (
+                                <article
+                                    key={activity._id}
+                                    style={{ marginBottom: "20px" }}
+                                >
+                                    <h3>{activity.action}</h3>
+
+                                    <p>{activity.description}</p>
+
+                                    <p>
+                                        By:{" "}
+                                        {activity.user?.name || "Unknown user"}
+                                    </p>
+
+                                    <small>
+                                        {activity.createdAt
+                                            ? new Date(
+                                                  activity.createdAt
+                                              ).toLocaleString()
+                                            : "-"}
+                                    </small>
+                                </article>
+                            ))}
+                        </div>
+                    )}
+            </section>
+        </div>
+    );
+};
+
+export default LeadDetails;
