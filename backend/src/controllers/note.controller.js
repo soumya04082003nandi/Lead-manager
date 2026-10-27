@@ -70,7 +70,7 @@ const handleGetLeadNotes = async (req, res)=>{
         }
 
         //fetch notes of that lead
-        const note = await noteModel
+        const notes = await noteModel
         .find({lead:id})
         .populate("user", "name email role")
         .sort({createdAt: -1})
