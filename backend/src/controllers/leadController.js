@@ -1,7 +1,7 @@
 const leadModel = require("../models/leadModel");
 const userModel= require("../models/userModel")
 const activityModel = require("../models/activityModel")
-const isValidObjectId = require("../utils/validateObjectId");
+const {isValidObjectId} = require("../utils/validateObjectId");
 
 
 //emailRegex
