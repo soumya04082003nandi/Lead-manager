@@ -93,5 +93,6 @@ const handleGetLeadNotes = async (req, res)=>{
 }
 
 module.exports={
-    handleCreateNote
+    handleCreateNote,
+    handleGetLeadNotes
 }
