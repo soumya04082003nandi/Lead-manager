@@ -1,5 +1,5 @@
 const activityModel= require("../models/activityModel")
-const isValidObjectId= require("../utils/validateObjectId")
+const {isValidObjectId}= require("../utils/validateObjectId")
 
 const handleGetLeadActivities = async (req,res)=>{
     try {
@@ -19,7 +19,7 @@ const handleGetLeadActivities = async (req,res)=>{
         .populate("user","name email role")
         .sort({createdAt: -1});
 
-        console.log(activities," from activty controller");
+        // console.log(activities," from activty controller");
         
         return res.status(200).json({
             success:true,
